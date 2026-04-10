@@ -81,6 +81,54 @@
     backup: yes
   register: sshd_config_changed
 
+- name: Set HostBasedAuthentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?HostbasedAuthentication'
+    line: 'HostbasedAuthentication {{ allow_hostbased_auth }}'
+    backup: yes
+  register: sshd_config_changed
+
+- name: Set IgnoreRhosts
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?IgnoreRhosts'
+    line: 'IgnoreRhosts {{ ignore_rhosts }}'
+    backup: yes
+  register: sshd_config_changed
+
+- name: Set SSH LogLevel
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?LogLevel'
+    line: 'LogLevel {{ ssh_log_level }}'
+    backup: yes
+  register: sshd_config_changed
+
+- name: Set MaxAuthTries
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?MaxAuthTries'
+    line: 'MaxAuthTries {{ max_auth_tries }}'
+    backup: yes
+  register: sshd_config_changed
+
+- name: Set MaxSessions
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?MaxSessions'
+    line: 'MaxSessions {{ set_max_sessions }}'
+    backup: yes
+  register: sshd_config_changed
+
+- name: Set PrintMotd
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PrintMotd'
+    line: 'PrintMotd {{ set_print_motd }}'
+    backup: yes
+  register: sshd_config_changed
+
 - name: Restart SSHD With Changes (Debian)
   ansible.builtin.systemd:
     name: ssh
