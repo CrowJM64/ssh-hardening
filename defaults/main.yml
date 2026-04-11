@@ -1,25 +1,26 @@
 ---
 # SSH Server Config Change Defaults
-allow_root_ssh: no # yes/no
-allow_empty_passwords: no # yes/no
-allow_password_auth: no # yes/no
-allow_pubkey_auth: yes # yes/no 
-allow_x11_fwd: no # yes/no
+allow_root_ssh: 'no' # yes/no
+allow_empty_passwords: 'no' # yes/no
+allow_password_auth: 'no' # yes/no
+allow_pubkey_auth: 'yes' # yes/no 
+allow_x11_fwd: 'no' # yes/no
 client_alive_dur: 300 # Seconds to keep inactive SSH Session alive for.
-allow_hostbased_auth: no # yes/no
-ignore_rhosts: yes #yes/no
+allow_hostbased_auth: 'no' # yes/no
+ignore_rhosts: 'yes' #yes/no
 ssh_log_level: VERBOSE # QUIET, FATAL, ERROR, INFO, VERBOSE
 max_auth_tries: 6 # Max Attempts per connection.
 set_max_sessions: 10
-set_max_startups: 10:30:100 # Maximum Yet-Unauthenticated SSH Connections
-set_print_motd: no # yes/no
+set_max_startups: 10:30:100 # Start:Rate:Full - Max Unauthenticated SSH Connections. Start=Allowed Until Ratelimit, Rate is % chance of dropping subsequent connections, Full is dropping any connections past this number, e.g. 100th failed SSH Connection.
+set_print_motd: 'no' # yes/no
 
 # User SSH Defaults
 ssh_users_and_keys:
   - user: ansible
     key: "ssh-ed25519 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    groups: wheel
+    groups: ansible
     shell: /bin/bash
+    admin: yes
 
 #  -user: example
 #   key: "{{ lookup('file', 'files/ssh/example/id_ed25519.pub') }}"

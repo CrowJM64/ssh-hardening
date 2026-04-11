@@ -16,6 +16,26 @@
     groups: "{{ item.groups }}"
     append: yes
   loop: "{{ ssh_users_and_keys }}"
+  
+- name: Add User to Sudo (RHEL)
+  ansible.builtin.user:
+    name: "{{ item.user }}"
+    groups: sudo
+    append: yes
+  loop: "{{ ssh_users_and_keys }}"
+  when: 
+    - item.admin == "yes"
+    - ansible_os_family == "RedHat"
+
+- name: Add User to Wheel (DEB)
+  ansible.builtin.user:
+    name: "{{ item.user }}"
+    groups: wheel
+    append: yes
+  loop: "{{ ssh_users_and_keys }}"
+  when:
+    - item.admin == "yes"
+    - ansible_os_family == "Debian"
 
 - name: Ensure SSH Directories Exist
   ansible.builtin.file:
@@ -118,6 +138,14 @@
     path: /etc/ssh/sshd_config
     regexp: '^#?MaxSessions'
     line: 'MaxSessions {{ set_max_sessions }}'
+    backup: yes
+  register: sshd_config_changed
+
+- name: Set MaxStartups
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?MaxStartups'
+    line: 'MaxStartups {{ set_max_startups }}'
     backup: yes
   register: sshd_config_changed
 
